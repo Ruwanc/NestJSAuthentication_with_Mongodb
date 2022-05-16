@@ -4,6 +4,7 @@ import { UserDocument } from './user.schema';
 import { Model } from 'mongoose';
 import { UserDetails } from './user-details.interface';
 import { UpdateUserDTO } from './dtos/update-user.dto';
+import { GetUserDataByEmailDTO } from './dtos/get-user-email.dto';
 
 
 @Injectable()
@@ -20,6 +21,12 @@ export class UserService {
 
     async findByEmail(email: string): Promise<UserDocument | null> {
         return this.userModel.findOne({email}).exec();
+    }
+
+    async getDetailByEmail(getuserdataByemail: Readonly<GetUserDataByEmailDTO>): Promise<UserDetails | null> {
+        const { email } = getuserdataByemail;
+        const user = await this.userModel.findOne({email}).exec();
+        return this._getUserDetails(user);
     }
 
     async findById(id: string): Promise<UserDetails | null> {
